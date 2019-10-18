@@ -1,30 +1,17 @@
 # -*- mode: ruby -*-
-# vi: set ft=ruby :
 
-DIR = File.dirname(__FILE__)
-
-require "yaml"
-
-$env_config = YAML.load_file(File.join(DIR, "env.yml"))
-
-Vagrant.configure("2") do |config|
-  config.vm.box = $env_config["box"]
-
-  $env_config["instances"].each do |instance|
-    instance_name = instance["name"]
-    config.vm.define instance_name do |instance_config|
-
-      # instance is the yaml configuration hash for the node
-      # instance_config is the Vagrant configuration for the instance
-
-      instance_config.vm.hostname = instance_name
-      instance_config.vm.network :private_network, ip: instance["box_ip"]
-
-      # set up the provider for the instance
-      instance_config.vm.provider "virtualbox" do |v|
-        v.customize ["modifyvm", :id, "--memory", instance["memory"]]
-        v.customize ["modifyvm", :id, "--cpus", instance["cpu"]]
-        v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+require 'yaml'
+servers = YAML.load_file('env.yml')
+API_VERSION = "2"
+Vagrant.configure(API_VERSION) do |config|
+  servers.each do | servers |
+    config.vm.define servers["name"] do |machine|
+      machine.vm.box = servers["box"]
+      machine.vm.network :forwarded_port, guest: 22, host: servers["ssh"], id: 'ssh'
+      machine.vm.provider :virtualbox do |vb|
+        vb.name = servers["name"]
+        vb.memory = servers["memory"]
+        vb.cpus = servers["cpu"]
       end
     end
   end
