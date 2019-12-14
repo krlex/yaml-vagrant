@@ -6,7 +6,6 @@
     memory: 512
     ssh: 2222
     cpu: 1
-    provision:
 
   - name: database
     box: debian/buster64
