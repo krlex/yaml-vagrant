@@ -12,6 +12,7 @@ Vagrant.configure(API_VERSION) do |config|
       machine.vm.provider :virtualbox do |vb|
         vb.name = servers["name"]
         vb.memory = servers["memory"]
+        vb.disksize.size = ["disksize"]
         vb.cpus = servers["cpu"]
       end
     end

@@ -4,6 +4,7 @@
     box: debian/buster64
     box_ip: 10.1.10.10
     memory: 512
+    disksize: 50GB
     ssh: 2222
     cpu: 1
 
@@ -12,4 +13,5 @@
     box_ip: 10.1.10.20
     ssh: 2221
     memory: 256
+    disksize: 50GB
     cpu: 1
