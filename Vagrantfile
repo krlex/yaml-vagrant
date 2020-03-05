@@ -1,5 +1,8 @@
 # -*- mode: ruby -*-
 
+require File.dirname(__FILE__)+"/plugin_manager"
+check_plugins ["vagrant-reload", "vagrant-vbguest", "vagrant-timezone", "vagrant-disksize"]
+
 require 'yaml'
 servers = YAML.load_file('srv_name.yml')
 API_VERSION = "2"
@@ -12,7 +15,7 @@ Vagrant.configure(API_VERSION) do |config|
       machine.vm.provider :virtualbox do |vb|
         vb.name = servers["name"]
         vb.memory = servers["memory"]
-        vb.disksize.size = ["disksize"]
+        vb.disksize.size = servers["disksize"]
         vb.cpus = servers["cpu"]
       end
     end
